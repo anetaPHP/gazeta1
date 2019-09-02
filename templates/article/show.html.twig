@@ -1,0 +1,79 @@
+{% extends 'base.html.twig.' %}
+{%  block title %} {{ article.title }}{% endblock %}
+{% block body %}
+<br>
+
+    <div class="card mb-3" style="margin-left: 200px; margin-right: 360px">
+        <h3 class="card-header">{{ article.title }}</h3>
+        <div class="card-body">
+            <div>
+
+
+            </div>
+            {% for komentarz in comment.content %}
+            <span class="badge badge-info">{{ komentarz.content }}</span> <!-- Tutaj sie znajda kategorie-->
+            {% endfor %}
+            {% for komentarz in comment %}
+            <span class="badge badge-light">{{ komentarz.content }}</span> <!-- Tutaj sie znajda tagi, do ktorych nalezy artykul-->
+            {% endfor %}
+            <h6 class="card-title"> <span class="pl-2 article-details"> {{ 'dodano: ' ~ article.createdAt|date("d/m/Y") }} </span></h6>
+
+            <h5 class="card-subtitle text-muted"> <span class="align-left article-details"><img class="article-author-img rounded-circle" height="52" width="52"src="{{ asset('images/IMG_9846.JPG') }}"> Autor </span> </h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text"> {{ article.content }}</p>
+        </div>
+        <div class="card-footer text-muted">
+            <table style="max-width: max-content">
+                <tr>
+                    <th width="38%"><a href="#" class="card-link"> << Wcześniejszy artykuł </a></th>
+                    <th width="43%"><br><br> <button type="button" href="#" class="btn btn-primary disabled">Wszystkie artykuły</button></th>
+                    <th width="19%"><a href="#" class="card-link"> Następny artykuł >> </a></th>
+            </table>
+            <br>
+        </div>
+    </div>
+
+{% endblock %}
+{% block body1 %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3><i class="pr-3 fa fa-comment"></i>
+                                <h2>Komentarze ({{ comment|length }})</h2>
+                            </h3>
+                            <hr>
+                            <div class="row mb-5">
+                                <div class="col-sm-12">
+                                    <img style="height: 100px; width: 100px;"class="comment-img rounded-circle" src="{{ asset('images/IMG_9846.JPG') }}">
+                                    <div class="comment-container d-inline-block pl-3 align-top">
+                                        <span class="commenter-name">User</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control comment-form" id="articleText" rows="1"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-info">Komentuj</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for komentarz in comment %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="comment-container d-inline-block pl-3 align-top">
+                                        <br>
+                                        <span class="comment"> {{ komentarz }}</span>
+                                        <p><a href="#">Odpowiedź</a></p>
+
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

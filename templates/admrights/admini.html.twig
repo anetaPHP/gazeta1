@@ -1,0 +1,30 @@
+{% extends 'base.html.twig.' %}
+{%  block title %} {{ "GAZETA - O" }}{% endblock %}
+{% block body %}
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Tytuł</th>
+        <th scope="col">Kategoria</th>
+        <th scope="col">Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for artykul in article %}
+    <tr class="table-light">
+        <th scope="row">{{ artykul.id }}</th>
+        <td>{{ artykul.title }}</td>
+        <td>Column content</td>
+        <td><button type="button" class="btn btn-primary">Primary</button>
+            <button type="button" class="btn btn-success">Success</button>
+            <button type="button" class="btn btn-info">Info</button></td>
+            <button type="button" class="btn btn-primary">Primary</button>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <br><br>
+{% endblock %}
+{% block body1 %}
+{% endblock %}

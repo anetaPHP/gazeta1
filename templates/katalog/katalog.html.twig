@@ -1,0 +1,88 @@
+{% extends 'base.html.twig.' %}
+{%  block title %} {{ "GAZETA - O" }}{% endblock %}
+{% block body %}
+    <div class="jumbotron">
+        <h3 class="display-3">Wszystkie opowieści w jednym miejscu</h3>
+        <hr class="my-4">
+        <p>Chcesz również dodawać komentarze? Zaloguj się do serwisu.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="#" role="button">Login</a>
+        </p>
+    </div>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#home">Wszystkie opowieści</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#profile">Legendy</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#">Bajki</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#profile">Baśnie Andersena</a>
+        </li>
+
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade show active" id="wszystkie">
+            {% for artykul in article %}
+                <div class="list-group" style="margin-left: 160px; margin-right: 260px; margin-bottom: 10px">
+                    <a href="{{ path('article_show',{slug:artykul.slug}) }}"  class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ artykul.title }}</h5>
+                            <small class="text-muted">{{ 'dodano: ' ~ artykul.createdAt|date("d/m/Y") }}</small>
+                        </div>
+                        <p class="mb-1">{{ artykul.subtitle }}</p>
+
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="legendy">
+            {% for artykul in article %}
+                <div class="list-group" style="margin-left: 160px; margin-right: 260px; margin-bottom: 10px">
+                    <a href="{{ path('article_show',{slug:artykul.slug}) }}"  class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ artykul.title }}</h5>
+                            <small class="text-muted">{{ 'dodano: ' ~ artykul.createdAt|date("d/m/Y") }}</small>
+                        </div>
+                        <p class="mb-1">{{ artykul.subtitle }}</p>
+
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="bajki">
+            {% for artykul in article %}
+                <div class="list-group" style="margin-left: 160px; margin-right: 260px; margin-bottom: 10px">
+                    <a href="{{ path('article_show',{slug:artykul.slug}) }}"  class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ artykul.title }}</h5>
+                            <small class="text-muted">{{ 'dodano: ' ~ artykul.createdAt|date("d/m/Y") }}</small>
+                        </div>
+                        <p class="mb-1">{{ artykul.subtitle }}</p>
+
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="andersen">
+            {% for artykul in article %}
+                <div class="list-group" style="margin-left: 160px; margin-right: 260px; margin-bottom: 10px">
+                    <a href="{{ path('article_show',{slug:artykul.slug}) }}"  class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ artykul.title }}</h5>
+                            <small class="text-muted">{{ 'dodano: ' ~ artykul.createdAt|date("d/m/Y") }}</small>
+                        </div>
+                        <p class="mb-1">{{ artykul.subtitle }}</p>
+
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br>
+{% endblock %}
+{% block body1 %}
+{% endblock %}
