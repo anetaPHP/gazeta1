@@ -1,116 +1,50 @@
 <?php
+/**
+ * Article fixtures.
+ */
 
 namespace App\DataFixtures;
 
 use App\Entity\Article;
-use App\Entity\Comment;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory;
-use Zend\I18n\Validator\DateTime;
 
-
-class ArticleFixtures extends AbstractBaseFixtures
+/**
+ * Class ArticleFixtures.
+ */
+class ArticleFixtures extends AbstractBaseFixtures implements DependentFixtureInterface
 {
-    private static $articleTitles = [
-        'Why Asteroids Taste Like Bacon',
-        'Life on Planet Mercury: Tan, Relaxing and Fabulous',
-        'Light Speed Travel: Fountain of Youth or Fallacy',
-    ];
-
-    private static $articleSubTitles = [
-        'Sub1',
-        'LSub2',
-        'LSub3y',
-    ];
-
-    private static $articleAuthors = [
-        'Mike Ferengi',
-        'Amy Oort',
-    ];
-
-    public function loadData(ObjectManager $manager):void
+    /**
+     * Load.
+     *
+     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     */
+    public function loadData(ObjectManager $manager): void
     {
-        $this->createMany(10, '', function(Article $article, $count) use ($manager){
-            $article = new Article();
-            $article->setTitle($this->faker->word);
-            $article->setContent('uip capicola officia. Labore deserunt esse chicken lorem shoulder tail consecteturt');
-            $article->setSlug('kot-w-butach'.rand(100,999));
-            $article->setSubtitle('Subtitle...');
-            $article->setCreatedAt($this->faker->DateTime());
-
-
-
-            $comment = new Comment();
-            $comment->setAuthor('Mike Ferengi');
-            $comment->setContent('I ate a normal rock once. It did NOT taste like bacon!');
-            $comment->setArticle($article);
-
-            $comment1 = new Comment();
-            $comment1->setAuthor($this->faker->randomElement(self::$articleAuthors));
-            $comment1->setContent('with faker!');
-            $comment1->setArticle($article);
+        $this->createMany(20, 'article', function ($i) {
+            $article = new article();
+            $article->setTitle($this->faker->sentence);
+            $article->setSubtitle($this->faker->word);
+            $article->setContent($this->faker->text);
+            $article->setCreatedAt($this->faker->dateTime());
+            $article->setSlug($this->faker->text);
+            $article->setUser($this->getRandomReference('admins'));
+            $article->setCategory($this->getRandomReference('category'));
 
             return $article;
         });
 
         $manager->flush();
     }
-}
-<?php
 
-namespace App\DataFixtures;
-
-use App\Entity\Article;
-use App\Entity\Comment;
-use Doctrine\Common\Persistence\ObjectManager;
-use Faker\Factory;
-use Zend\I18n\Validator\DateTime;
-
-
-class ArticleFixtures extends AbstractBaseFixtures
-{
-    private static $articleTitles = [
-        'Why Asteroids Taste Like Bacon',
-        'Life on Planet Mercury: Tan, Relaxing and Fabulous',
-        'Light Speed Travel: Fountain of Youth or Fallacy',
-    ];
-
-    private static $articleSubTitles = [
-        'Sub1',
-        'LSub2',
-        'LSub3y',
-    ];
-
-    private static $articleAuthors = [
-        'Mike Ferengi',
-        'Amy Oort',
-    ];
-
-    public function loadData(ObjectManager $manager):void
+    /**
+     * This method must return an array of fixtures classes
+     * on which the implementing class depends on.
+     *
+     * @return array Array of dependencies
+     */
+    public function getDependencies(): array
     {
-        $this->createMany(10, '', function(Article $article, $count) use ($manager){
-            $article = new Article();
-            $article->setTitle($this->faker->word);
-            $article->setContent('uip capicola officia. Labore deserunt esse chicken lorem shoulder tail consecteturt');
-            $article->setSlug('kot-w-butach'.rand(100,999));
-            $article->setSubtitle('Subtitle...');
-            $article->setCreatedAt($this->faker->DateTime());
-
-
-
-            $comment = new Comment();
-            $comment->setAuthor('Mike Ferengi');
-            $comment->setContent('I ate a normal rock once. It did NOT taste like bacon!');
-            $comment->setArticle($article);
-
-            $comment1 = new Comment();
-            $comment1->setAuthor($this->faker->randomElement(self::$articleAuthors));
-            $comment1->setContent('with faker!');
-            $comment1->setArticle($article);
-
-            return $article;
-        });
-
-        $manager->flush();
+        return [CategoryFixtures::class, TagFixtures::class, UserFixtures::class];
     }
 }

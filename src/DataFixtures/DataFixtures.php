@@ -77,7 +77,9 @@ abstract class DataFixtures extends Fixture
             $entity = $factory($i);
 
             if (null === $entity) {
-                throw new \LogicException('Did you forget to return the entity object from your callback to BaseFixture::createMany()?');
+                throw new \LogicException(
+                    'Did you forget to return the entity object from your callback to BaseFixture::createMany()?'
+                );
             }
 
             $this->manager->persist($entity);
@@ -107,7 +109,11 @@ abstract class DataFixtures extends Fixture
         }
 
         if (empty($this->referencesIndex[$groupName])) {
-            throw new \InvalidArgumentException(sprintf('Did not find any references saved with the group name "%s"', $groupName));
+            /** @var TYPE_NAME $groupName */
+            throw new \InvalidArgumentException(sprintf(
+                'Did not find any references saved with the group name "%s"',
+                $groupName
+            ));
         }
 
         $randomReferenceKey = $this->faker->randomElement($this->referencesIndex[$groupName]);

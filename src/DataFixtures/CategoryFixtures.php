@@ -2,6 +2,7 @@
 /**
  * Category fixture.
  */
+
 namespace App\DataFixtures;
 
 use App\Entity\Category;
@@ -19,7 +20,7 @@ class CategoryFixtures extends AbstractBaseFixtures
      */
     public function loadData(ObjectManager $manager): void
     {
-        $this->createMany(10, 'category', function ($i) {
+        $this->createMany(3, 'category', function ($i) {
             $category = new Category();
             $category->setName($this->faker->word);
 

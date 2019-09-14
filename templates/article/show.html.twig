@@ -1,75 +1,111 @@
-{% extends 'base.html.twig.' %}
-{%  block title %} {{ article.title }}{% endblock %}
+{% extends 'base.html.twig' %}
+{% block title %} {{ article.title }}{% endblock %}
 {% block body %}
-<br>
+    <br>
 
     <div class="card mb-3" style="margin-left: 200px; margin-right: 360px">
         <h3 class="card-header">{{ article.title }}</h3>
         <div class="card-body">
             <div>
-
-
+                <h5 class="card-subtitle text-muted"> {{ article.subtitle }} </h5>
+                <br>
+                {% if article.category %}
+                    <span class="badge badge-info">{{ article.category.name }}</span>
+                {% endif %}
+                {% for tag in article.tag %}
+                    <span class="badge badge-secondary">{{ tag.name }}</span>
+                {% endfor %}
+                <h6 class="card-title"><span
+                            class="pl-2 article-details"> {{ 'label.published'|trans  ~ ': ' ~ article.createdAt|date("d/m/Y") }} </span>
+                </h6>
             </div>
-            {% for komentarz in comment.content %}
-            <span class="badge badge-info">{{ komentarz.content }}</span> <!-- Tutaj sie znajda kategorie-->
-            {% endfor %}
-            {% for komentarz in comment %}
-            <span class="badge badge-light">{{ komentarz.content }}</span> <!-- Tutaj sie znajda tagi, do ktorych nalezy artykul-->
-            {% endfor %}
-            <h6 class="card-title"> <span class="pl-2 article-details"> {{ 'dodano: ' ~ article.createdAt|date("d/m/Y") }} </span></h6>
+            <div class="card-body">
+                <p>{{ article.content }} </p>
+            </div>
+            <div class="card-footer text-muted">
+                <table style="max-width: max-content">
+                    <tr>
+                        <th style="text-align:center "><br><br> <a href="{{ path('app_stronastartowa') }}">
+                                <button type="button"
+                                        class="btn btn-primary disabled">{{ 'label.allarticle'|trans }}</button>
+                            </a></th>
+                </table>
+                <br>
+            </div>
+        </div>
 
-            <h5 class="card-subtitle text-muted"> <span class="align-left article-details"><img class="article-author-img rounded-circle" height="52" width="52"src="{{ asset('images/IMG_9846.JPG') }}"> Autor </span> </h5>
-        </div>
-        <div class="card-body">
-            <p class="card-text"> {{ article.content }}</p>
-        </div>
-        <div class="card-footer text-muted">
-            <table style="max-width: max-content">
-                <tr>
-                    <th width="38%"><a href="#" class="card-link"> << Wcześniejszy artykuł </a></th>
-                    <th width="43%"><br><br> <button type="button" href="#" class="btn btn-primary disabled">Wszystkie artykuły</button></th>
-                    <th width="19%"><a href="#" class="card-link"> Następny artykuł >> </a></th>
-            </table>
-            <br>
-        </div>
     </div>
 
 {% endblock %}
 {% block body1 %}
     <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="show-article-container p-3 mt-4">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h3><i class="pr-3 fa fa-comment"></i>
-                                <h2>Komentarze ({{ comment|length }})</h2>
-                            </h3>
-                            <hr>
-                            <div class="row mb-5">
-                                <div class="col-sm-12">
-                                    <img style="height: 100px; width: 100px;"class="comment-img rounded-circle" src="{{ asset('images/IMG_9846.JPG') }}">
-                                    <div class="comment-container d-inline-block pl-3 align-top">
-                                        <span class="commenter-name">User</span>
-                                        <div class="form-group">
-                                            <textarea class="form-control comment-form" id="articleText" rows="1"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-info">Komentuj</button>
-                                    </div>
-                                </div>
-                            </div>
-                            {% for komentarz in comment %}
-                            <div class="row">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="show-article-container p-3 mt-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3><i class="pr-3 fa fa-comment"></i>
+                            <h2>{{ 'label.comments'|trans ~ ' (' ~ article.comments|length ~ ')' }}</h2>
+                        </h3>
+                        <hr>
+                        <div class="row mb-5">
+                            {% if is_granted('ROLE_USER') == true %}
                                 <div class="col-sm-12">
                                     <div class="comment-container d-inline-block pl-3 align-top">
-                                        <br>
-                                        <span class="comment"> {{ komentarz }}</span>
-                                        <p><a href="#">Odpowiedź</a></p>
+                                        <form action="{{ path('article_show', {'id': article.id}) }}" method="post">
+                                            {{ form_start(form) }}
 
+                                            {% if false == form.vars.valid %}
+                                                {% include 'default/_single_flash_message.html.twig' with {
+                                                    type: 'danger',
+                                                    message: 'message.form_error'|trans,
+                                                } %}
+                                            {% endif %}
+                                            {{ form_widget(form) }}
+                                            <input type="submit"
+                                                   value="{{ submit_label|default ~ 'label.comment'|trans }}"
+                                                   class="btn btn-info"/>
+                                            {{ form_end(form) }}
+                                        </form>
+                                        <br><br>
                                     </div>
                                 </div>
-                            </div>
-                            {% endfor %}
+                            {% endif %}
+
+                            {% if comments is defined and article.comments|length %}
+
+
+                                {% for komentarz in comments %}
+                                    <table class="table table-striped">
+                                        <tbody>
+                                        <tr>
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="comment-container d-inline-block pl-3 align-top">
+                                                        <p class="text-secondary">{{ '#' ~ komentarz.id }} </p>
+                                                        <p class="text-primary"> {{ komentarz.author.loginname }}</p>
+                                                        <span class="comment"> {{ komentarz.content }}</span>
+                                                        <br>
+                                                    </div>
+                                                    <hr>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                {% endfor %}
+
+                                <div class="navigation text-center">
+                                    {{ knp_pagination_render(comments) }}
+                                </div>
+
+                            {% else %}
+                                <h5><p style="margin-left: 200px" class="text-info">
+                                        {{ 'label.nocomment'|trans }}
+                                    </p></h5>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

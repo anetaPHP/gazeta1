@@ -1,0 +1,13 @@
+{% block body %}
+    {% include 'default/_form.html.twig' with {
+        page_title: 'label.addcat' ,
+        attr: {
+            method: 'POST',
+            action: url('category_new')
+        },
+        back_to_list_path: 'category_index',
+        submit_label: 'label.add'|trans ,
+    } %}
+
+
+{% endblock %}
